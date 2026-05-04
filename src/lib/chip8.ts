@@ -17,6 +17,17 @@ const FONT_SET = new Uint8Array([
   0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 ]);
 
+export type Chip8Snapshot = {
+  memory: Uint8Array;
+  registers: Uint8Array;
+  indexRegister: number;
+  programCounter: number;
+  stack: number[];
+  delayTimer: number;
+  soundTimer: number;
+  display: Uint8Array;
+  keypad: boolean[];
+};
 
 export class Chip8 {
   memory: Uint8Array = new Uint8Array(4096);
@@ -60,6 +71,32 @@ export class Chip8 {
     this.display = new Uint8Array(64 * 32);
     this.keypad = new Array(16).fill(false);
     this.memory.set(FONT_SET, 0x000);
+  }
+
+  snapshot(): Chip8Snapshot {
+    return {
+      memory: this.memory.slice(),
+      registers: this.registers.slice(),
+      indexRegister: this.indexRegister,
+      programCounter: this.programCounter,
+      stack: [...this.stack],
+      delayTimer: this.delayTimer,
+      soundTimer: this.soundTimer,
+      display: this.display.slice(),
+      keypad: [...this.keypad]
+    };
+  }
+
+  restore(snapshot: Chip8Snapshot) {
+    this.memory = snapshot.memory.slice();
+    this.registers = snapshot.registers.slice();
+    this.indexRegister = snapshot.indexRegister;
+    this.programCounter = snapshot.programCounter;
+    this.stack = [...snapshot.stack];
+    this.delayTimer = snapshot.delayTimer;
+    this.soundTimer = snapshot.soundTimer;
+    this.display = snapshot.display.slice();
+    this.keypad = [...snapshot.keypad];
   }
 
   step() {
