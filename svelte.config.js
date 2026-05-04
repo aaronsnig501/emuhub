@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 const config = {
   preprocess: vitePreprocess(),
   kit: {
@@ -10,7 +12,7 @@ const config = {
       fallback: '404.html'
     }),
     paths: {
-      base: '/emuhub'
+      base: isProduction ? '/emuhub' : ''
     }
   }
 };

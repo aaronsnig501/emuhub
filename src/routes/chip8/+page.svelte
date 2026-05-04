@@ -72,8 +72,8 @@ function onKeyUp(e: KeyboardEvent) {
 }
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:keyup={onKeyUp} />
+<svelte:window onkeydown={onKeyDown} onkeyup={onKeyUp} />
 
-<input type="file" on:change={onFileChange} accept=".ch8,.rom" />
-<canvas width={640} height={320} bind:this={canvas} />
-<button on:click={restart} disabled={!currentRom}>Restart</button>
+<input type="file" onchange={onFileChange} accept=".ch8,.rom" />
+<canvas width={640} height={320} bind:this={canvas}></canvas>
+<button onclick={restart} disabled={!currentRom}>Restart</button>
