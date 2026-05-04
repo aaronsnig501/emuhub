@@ -1,3 +1,90 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	--font-display: 'Bebas Neue', sans-serif;
+	--font-mono: 'DM Mono', monospace;
+	--font-sans: 'DM Sans', sans-serif;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-sans);
+		background: #0a0a0a;
+		color: #f0f0f0;
+	}
+
+	a,
+	button {
+		transition:
+			color 150ms ease,
+			border-color 150ms ease,
+			background-color 150ms ease,
+			transform 150ms ease,
+			box-shadow 150ms ease,
+			opacity 150ms ease;
+	}
+}
+
+@layer components {
+	.section-eyebrow {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.65rem;
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--theme-accent-1);
+	}
+
+	.section-eyebrow::before {
+		content: '';
+		width: 1.25rem;
+		height: 1px;
+		background: var(--theme-accent-1);
+	}
+
+	.section-title {
+		margin-top: 0.85rem;
+		margin-bottom: 0;
+		font-family: var(--font-display);
+		font-size: clamp(2.8rem, 5vw, 4.5rem);
+		line-height: 0.95;
+		letter-spacing: 0.12em;
+	}
+
+	.homepage-card-grid {
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+		background-size: 24px 24px;
+	}
+}
+
+@layer utilities {
+	.animate-fade-up {
+		animation: homepage-fade-up 600ms ease both;
+	}
+
+	.animate-fade-up-delayed {
+		animation: homepage-fade-up 600ms 150ms ease both;
+	}
+}
+
+@keyframes homepage-fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
