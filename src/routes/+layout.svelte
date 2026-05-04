@@ -2,7 +2,6 @@
 	import { base } from '$app/paths';
 	import './layout.css';
 	import AppNav from '$lib/components/AppNav.svelte';
-	import favicon from '$lib/assets/favicon.svg';
 
 	let { children } = $props();
 
@@ -14,6 +13,5 @@
 	];
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
 <AppNav items={navItems} />
 {@render children()}
