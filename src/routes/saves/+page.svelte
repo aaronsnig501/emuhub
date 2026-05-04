@@ -1,3 +1,7 @@
+<script lang="ts">
+	let { data }: { data: { selfHosted: boolean } } = $props();
+</script>
+
 <svelte:head>
 	<title>EMU·HUB — Saves</title>
 </svelte:head>
@@ -14,5 +18,10 @@
 			The current CHIP-8 player already supports in-memory save states. This dedicated route is ready
 			for future shared save management across multiple emulator systems.
 		</p>
+		{#if data.selfHosted}
+			<p class="mt-4 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-[#7dff96]">
+				Self-hosted mode has a mounted `/data/saves` path ready for private save persistence.
+			</p>
+		{/if}
 	</div>
 </div>

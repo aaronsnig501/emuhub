@@ -1,0 +1,27 @@
+services:
+  emuhub:
+    build:
+      context: .
+      args:
+        SELF_HOSTED: "true"
+    ports:
+      - "3000:3000"
+    environment:
+      SELF_HOSTED: "true"
+      SELF_HOSTED_API_TOKEN: ${SELF_HOSTED_API_TOKEN:-change-me}
+      EMUHUB_ROMS_DIR: /data/roms
+      EMUHUB_SAVES_DIR: /data/saves
+      DATABASE_URL: postgres://emuhub:emuhub@postgres:5432/emuhub
+    volumes:
+      - ./roms:/data/roms
+      - ./saves:/data/saves
+
+  postgres:
+    image: postgres:16-alpine
+    profiles: ["postgres"]
+    environment:
+      POSTGRES_USER: emuhub
+      POSTGRES_PASSWORD: emuhub
+      POSTGRES_DB: emuhub
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
