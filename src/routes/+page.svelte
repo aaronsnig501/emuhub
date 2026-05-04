@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import HeroCanvas from '$lib/components/homepage/HeroCanvas.svelte';
 	import {
 		getThemePalette,
@@ -6,11 +7,6 @@
 		type HomeThemeId,
 		type ThemeMode
 	} from '$lib/theme/homepageThemes';
-
-	type NavItem = {
-		label: string;
-		href: string;
-	};
 
 	type Fact = {
 		value: string;
@@ -32,13 +28,6 @@
 		keys: string;
 		action: string;
 	};
-
-	const navItems: NavItem[] = [
-		{ label: 'Overview', href: '#overview' },
-		{ label: 'System', href: '#system' },
-		{ label: 'Vision', href: '#scope' },
-		{ label: 'Controls', href: '#controls' }
-	];
 
 	const facts: Fact[] = [
 		{ value: '1', label: 'Implemented system' },
@@ -100,58 +89,6 @@
 </svelte:head>
 
 <div class="min-h-screen bg-[var(--theme-bg)] text-[var(--theme-text)]" style={themeStyle}>
-	<nav
-		class="fixed inset-x-0 top-0 z-50 border-b border-[var(--theme-border)] bg-[color:var(--theme-nav)]/90 backdrop-blur-xl"
-	>
-		<div
-			class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
-		>
-			<a href="#top" class="font-display text-[1.65rem] leading-none tracking-[0.2em]">
-				<span class="text-[var(--theme-accent-1)]">E</span>MU<span
-					class="mx-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--theme-accent-3)] shadow-[0_0_12px_var(--theme-accent-3)]"
-				></span>HUB
-			</a>
-
-			<div class="hidden items-center gap-8 lg:flex">
-				{#each navItems as item}
-					<a
-						href={item.href}
-						class="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--theme-text-2)] transition hover:text-[var(--theme-text)]"
-					>
-						{item.label}
-					</a>
-				{/each}
-			</div>
-
-			<div class="flex items-center gap-2">
-				<div
-					class="hidden rounded-md border border-[var(--theme-border-strong)] bg-[var(--theme-surface-2)] p-1 sm:flex"
-				>
-					{#each homepageThemes as theme}
-						<button
-							type="button"
-							class={`rounded px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] transition ${
-								theme.id === themeId
-									? 'bg-[var(--theme-accent-1)] text-white shadow-[0_0_24px_color-mix(in_srgb,var(--theme-accent-1)_35%,transparent)]'
-									: 'text-[var(--theme-text-2)] hover:text-[var(--theme-text)]'
-							}`}
-							onclick={() => (themeId = theme.id)}
-						>
-							{theme.label}
-						</button>
-					{/each}
-				</div>
-				<button
-					type="button"
-					class="rounded-md border border-[var(--theme-border-strong)] px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--theme-text-2)] transition hover:text-[var(--theme-text)]"
-					onclick={() => (mode = mode === 'dark' ? 'light' : 'dark')}
-				>
-					{mode === 'dark' ? 'Dark' : 'Light'}
-				</button>
-			</div>
-		</div>
-	</nav>
-
 	<section
 		id="top"
 		class="relative overflow-hidden px-4 pb-16 pt-28 sm:px-6 sm:pb-20 lg:px-8 lg:pt-36"
@@ -199,9 +136,36 @@
 					explore the foundation for a multi-system emulator experience that will grow over time.
 				</p>
 
+				<div class="mt-6 flex flex-wrap gap-2">
+					<div
+						class="hidden rounded-md border border-[var(--theme-border-strong)] bg-[var(--theme-surface-2)] p-1 sm:flex"
+					>
+						{#each homepageThemes as theme}
+							<button
+								type="button"
+								class={`rounded px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] transition ${
+									theme.id === themeId
+										? 'bg-[var(--theme-accent-1)] text-white shadow-[0_0_24px_color-mix(in_srgb,var(--theme-accent-1)_35%,transparent)]'
+										: 'text-[var(--theme-text-2)] hover:text-[var(--theme-text)]'
+								}`}
+								onclick={() => (themeId = theme.id)}
+							>
+								{theme.label}
+							</button>
+						{/each}
+					</div>
+					<button
+						type="button"
+						class="rounded-md border border-[var(--theme-border-strong)] px-3 py-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--theme-text-2)] transition hover:text-[var(--theme-text)]"
+						onclick={() => (mode = mode === 'dark' ? 'light' : 'dark')}
+					>
+						{mode === 'dark' ? 'Dark' : 'Light'}
+					</button>
+				</div>
+
 				<div class="mt-8 flex flex-wrap gap-3">
 					<a
-						href="/chip8"
+						href={`${base}/play/chip8`}
 						class="rounded-md bg-[var(--theme-accent-1)] px-5 py-3 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-white shadow-[0_0_32px_color-mix(in_srgb,var(--theme-accent-1)_40%,transparent)] transition hover:brightness-110"
 					>
 						Open CHIP-8
@@ -279,8 +243,8 @@
 	</section>
 
 	<section id="system" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-		<div class="mb-10">
-			<p class="section-eyebrow">Implemented system</p>
+				<div class="mb-10">
+					<p class="section-eyebrow">Implemented system</p>
 			<h2 class="section-title">
 				One emulator.
 				<br />
@@ -411,7 +375,7 @@
 					</p>
 				</div>
 				<a
-					href="/chip8"
+					href={`${base}/play/chip8`}
 					class="rounded-md bg-[var(--theme-accent-1)] px-5 py-3 text-center font-mono text-[0.72rem] uppercase tracking-[0.18em] text-white shadow-[0_0_32px_color-mix(in_srgb,var(--theme-accent-1)_40%,transparent)] transition hover:brightness-110"
 				>
 					Open CHIP-8
@@ -424,14 +388,10 @@
 		<div class="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
 			<div class="font-display text-[1.35rem] tracking-[0.2em] text-[var(--theme-text-3)]">EMU·HUB</div>
 			<div class="flex flex-wrap items-center gap-6">
-				{#each navItems as item}
-					<a
-						href={item.href}
-						class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)] transition hover:text-[var(--theme-text)]"
-					>
-						{item.label}
-					</a>
-				{/each}
+				<a href="#overview" class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)] transition hover:text-[var(--theme-text)]">Overview</a>
+				<a href="#system" class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)] transition hover:text-[var(--theme-text)]">System</a>
+				<a href="#scope" class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)] transition hover:text-[var(--theme-text)]">Vision</a>
+				<a href="#controls" class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)] transition hover:text-[var(--theme-text)]">Controls</a>
 			</div>
 			<div class="font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)]">
 				CHIP-8 prototype · SvelteKit
