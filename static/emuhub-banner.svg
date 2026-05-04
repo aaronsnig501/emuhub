@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 160">
+  <rect width="800" height="160" fill="#0a0a0a"/>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.4" opacity="0.08"/>
+    </pattern>
+    <linearGradient id="fade-left" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="25%" stop-color="transparent"/>
+    </linearGradient>
+    <linearGradient id="fade-right" x1="1" x2="0" y1="0" y2="0">
+      <stop offset="0%" stop-color="#0a0a0a"/>
+      <stop offset="25%" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="160" fill="url(#grid)"/>
+  <rect width="200" height="160" fill="url(#fade-left)"/>
+  <rect x="600" width="200" height="160" fill="url(#fade-right)"/>
+  <g fill="#ff3030">
+    <rect x="60" y="40" width="8" height="80"/>
+    <rect x="60" y="40" width="32" height="12"/>
+    <rect x="60" y="74" width="26" height="12"/>
+    <rect x="60" y="108" width="32" height="12"/>
+  </g>
+  <g fill="#f0f0f0">
+    <rect x="104" y="40" width="8" height="80"/>
+    <rect x="152" y="40" width="8" height="80"/>
+    <rect x="112" y="40" width="8" height="22"/>
+    <rect x="132" y="40" width="8" height="22"/>
+    <rect x="120" y="54" width="12" height="16"/>
+  </g>
+  <g fill="#f0f0f0">
+    <rect x="172" y="40" width="8" height="68"/>
+    <rect x="172" y="108" width="42" height="12"/>
+    <rect x="206" y="40" width="8" height="68"/>
+  </g>
+  <circle cx="238" cy="80" r="7" fill="#ffc93c"/>
+  <circle cx="238" cy="80" r="14" fill="#ffc93c" opacity="0.15"/>
+  <g fill="#f0f0f0">
+    <rect x="256" y="40" width="8" height="80"/>
+    <rect x="256" y="74" width="40" height="12"/>
+    <rect x="288" y="40" width="8" height="80"/>
+  </g>
+  <g fill="#00e8b0">
+    <rect x="308" y="40" width="8" height="68"/>
+    <rect x="308" y="108" width="42" height="12"/>
+    <rect x="342" y="40" width="8" height="68"/>
+  </g>
+  <g fill="#00e8b0">
+    <rect x="362" y="40" width="8" height="80"/>
+    <rect x="370" y="40" width="22" height="10"/>
+    <rect x="392" y="50" width="8" height="24"/>
+    <rect x="370" y="74" width="26" height="10"/>
+    <rect x="396" y="84" width="8" height="24"/>
+    <rect x="370" y="108" width="24" height="10"/>
+  </g>
+  <text x="60" y="148" font-family="monospace" font-size="11" letter-spacing="3" fill="#555555" text-anchor="start">MULTI-SYSTEM EMULATOR HUB</text>
+  <rect x="60" y="136" width="344" height="1" fill="white" opacity="0.08"/>
+</svg>
