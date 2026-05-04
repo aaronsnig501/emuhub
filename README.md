@@ -2,7 +2,7 @@
 
 # EMU·HUB
 
-Browser-native emulator hub, starting with a playable CHIP-8 core and structured to grow into a multi-system frontend.
+Browser-native emulator hub, starting with a playable CHIP-8 core and now supporting a self-hosted private ROM library mode.
 
 [![Deploy to GitHub Pages](https://github.com/aaronsnig501/emuhub/actions/workflows/deploy.yml/badge.svg)](https://github.com/aaronsnig501/emuhub/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-00e8b0.svg)](#license)
@@ -14,6 +14,7 @@ Browser-native emulator hub, starting with a playable CHIP-8 core and structured
 - Emulator controls for run, pause, restart, single-step, and speed selection
 - In-memory save states with restore and delete actions
 - ROM info, keymap reference, live register view, and display theme swatches
+- Self-hosted ROM upload, list, download, and delete APIs behind token auth
 - Shared multi-emulator route structure: `/play/chip8`, `/play/[system]`, `/library`, `/saves`
 - Theme-ready SvelteKit UI with GitHub Pages deployment support
 
@@ -42,19 +43,29 @@ npm run lint
 
 ## Self-Hosting
 
-EMU·HUB currently builds to a static SvelteKit site. A simple way to self-host it is to build the app and serve the generated `build/` directory with a containerized web server:
+EMU·HUB supports a Node-based self-hosted mode that enables private ROM management on your own hardware.
+
+Build the image:
 
 ```sh
-npm install
-npm run build
-
-docker run --rm \
-  -p 3000:80 \
-  -v "$(pwd)/build:/usr/share/nginx/html:ro" \
-  nginx:alpine
+docker build --build-arg SELF_HOSTED=true -t emuhub .
 ```
 
-Then open `http://localhost:3000/emuhub` if you built with the production base path, or adjust the base path for your own deployment target.
+Run it:
+
+```sh
+docker run --rm \
+  -p 3000:3000 \
+  -e SELF_HOSTED=true \
+  -e SELF_HOSTED_API_TOKEN=change-me \
+  -v "$(pwd)/roms:/data/roms" \
+  -v "$(pwd)/saves:/data/saves" \
+  emuhub
+```
+
+Then open `http://localhost:3000`.
+
+For `docker-compose`, reverse-proxy examples, volume layout, and update instructions, see [docs/self-hosting.md](./docs/self-hosting.md).
 
 ## Systems
 
@@ -72,7 +83,7 @@ Then open `http://localhost:3000/emuhub` if you built with the production base p
 
 EMU·HUB does not ship with ROMs. You are responsible for the game files you load into the emulator and for complying with the laws that apply in your jurisdiction.
 
-Patch workflows can be supported without redistributing copyrighted game data, but patch usage still depends on you owning and using ROMs legally.
+In self-hosted mode, ROM uploads remain private to your own deployment and are protected by token-gated endpoints. Patch workflows can be supported without redistributing copyrighted game data, but patch usage still depends on you owning and using ROMs legally.
 
 ## Contributing
 

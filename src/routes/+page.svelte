@@ -29,6 +29,12 @@
 		action: string;
 	};
 
+	let {
+		data
+	}: {
+		data: { selfHosted: boolean };
+	} = $props();
+
 	const facts: Fact[] = [
 		{ value: '1', label: 'Implemented system' },
 		{ value: '35', label: 'CHIP-8 opcodes' },
@@ -51,6 +57,11 @@
 			title: 'Keyboard input mapping',
 			body: 'The emulator maps your keyboard to the CHIP-8 keypad so loaded ROMs can respond to input immediately.',
 			accent: 'var(--theme-accent-3)'
+		},
+		{
+			title: 'Self-hosted library mode',
+			body: 'Run EMU·HUB with SELF_HOSTED=true to unlock private ROM upload and management on your own hardware, while the cloud build stays static.',
+			accent: 'var(--theme-accent-2)'
 		}
 	];
 
@@ -59,7 +70,8 @@
 		{ label: 'Input', value: 'Keyboard-mapped keypad controls' },
 		{ label: 'Display', value: 'Scaled pixel output for classic ROMs' },
 		{ label: 'Runtime', value: 'Client-side emulator running entirely in your browser' },
-		{ label: 'Direction', value: 'The first system in a growing emulator hub' }
+		{ label: 'Direction', value: 'The first system in a growing emulator hub' },
+		{ label: 'Self-hosted', value: 'Private ROM library mode available' }
 	];
 
 	const controls: Control[] = [
@@ -134,6 +146,7 @@
 				<p class="mt-6 max-w-xl text-base leading-8 text-[var(--theme-text-2)] sm:text-lg">
 					EMU·HUB begins with CHIP-8: load a ROM from your machine, play in the browser, and
 					explore the foundation for a multi-system emulator experience that will grow over time.
+					Self-hosted deployments can also unlock a private ROM library on your own hardware.
 				</p>
 
 				<div class="mt-6 flex flex-wrap gap-2">
@@ -176,6 +189,14 @@
 					>
 						What&apos;s next
 					</a>
+					{#if data.selfHosted}
+						<a
+							href={`${base}/library`}
+							class="rounded-md border border-[color:color-mix(in_srgb,var(--theme-accent-2)_36%,var(--theme-border-strong))] px-5 py-3 font-mono text-[0.72rem] uppercase tracking-[0.18em] text-[var(--theme-accent-2)] transition hover:brightness-110"
+						>
+							Open library
+						</a>
+					{/if}
 				</div>
 
 				<p class="mt-5 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--theme-text-3)]">
@@ -279,7 +300,7 @@
 				</div>
 			</article>
 
-			<div class="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
+			<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
 				{#each capabilities as capability}
 					<article
 						class="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface)] p-6 transition hover:-translate-y-1 hover:border-[var(--theme-border-strong)] hover:bg-[var(--theme-surface-2)]"
@@ -329,6 +350,13 @@
 						<p class="mt-3 text-sm leading-7 text-[var(--theme-text-2)]">
 							More emulator support is planned. The app is being built so new systems can be
 							added without redesigning the overall experience.
+						</p>
+					</div>
+					<div class="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface-2)] p-5">
+						<div class="font-display text-[1.8rem] leading-none tracking-[0.08em]">Self-hosted mode</div>
+						<p class="mt-3 text-sm leading-7 text-[var(--theme-text-2)]">
+							Private ROM management can run behind a Node deployment with `SELF_HOSTED=true`,
+							while the public GitHub Pages build remains backend-free.
 						</p>
 					</div>
 					<div class="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface-2)] p-5">
