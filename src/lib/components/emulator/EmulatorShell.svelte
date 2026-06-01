@@ -44,7 +44,8 @@
 		{ id: 'phosphor', label: 'Phosphor', screen: '#020403', pixel: '#7dff96', glow: 'rgba(125,255,150,0.6)', frame: '#7dff96' },
 		{ id: 'arcade', label: 'Arcade', screen: '#050505', pixel: '#ff5a36', glow: 'rgba(255,90,54,0.58)', frame: '#ff5a36' },
 		{ id: 'ice', label: 'Ice', screen: '#041017', pixel: '#7be8ff', glow: 'rgba(123,232,255,0.52)', frame: '#7be8ff' },
-		{ id: 'amber', label: 'Amber', screen: '#120b03', pixel: '#ffc14d', glow: 'rgba(255,193,77,0.55)', frame: '#ffc14d' }
+		{ id: 'amber', label: 'Amber', screen: '#120b03', pixel: '#ffc14d', glow: 'rgba(255,193,77,0.55)', frame: '#ffc14d' },
+		{ id: 'mono', label: 'Mono', screen: '#000000', pixel: '#ffffff', glow: 'rgba(255,255,255,0.4)', frame: '#ffffff' }
 	];
 
 	const keymapRows: KeymapRow[] = [
@@ -248,7 +249,17 @@
 		}
 	}
 
+	function setTheme(id: string) {
+		currentThemeId = id;
+		localStorage.setItem(`${systemName}-theme`, id);
+		render();
+	}
+
 	onMount(() => {
+		const saved = localStorage.getItem(`${systemName}-theme`);
+		if (saved && displayThemes.some(t => t.id === saved)) {
+			currentThemeId = saved;
+		}
 		render();
 	});
 
@@ -352,7 +363,7 @@
 				</div>
 				<div class="grid gap-3 sm:grid-cols-2">
 					{#each displayThemes as theme}
-						<button type="button" class={`rounded-2xl border p-4 text-left ${currentThemeId === theme.id ? 'border-white/28 bg-[#1c1c1c]' : 'border-white/10 bg-[#171717] hover:border-white/22'}`} onclick={() => { currentThemeId = theme.id; render(); }}>
+						<button type="button" class={`rounded-2xl border p-4 text-left ${currentThemeId === theme.id ? 'border-white/28 bg-[#1c1c1c]' : 'border-white/10 bg-[#171717] hover:border-white/22'}`} onclick={() => setTheme(theme.id)}>
 							<div class="mb-3 flex gap-2">
 								<span class="h-5 w-5 rounded-full border border-white/10" style={`background:${theme.screen};`}></span>
 								<span class="h-5 w-5 rounded-full border border-white/10" style={`background:${theme.pixel};`}></span>
