@@ -224,6 +224,15 @@
 	}
 
 	function onKeyDown(event: KeyboardEvent) {
+		if (event.code === 'Space') {
+			if (isRunning) {
+				pauseLoop();
+			} else {
+				startLoop();
+			}
+			return;
+		}
+
 		const key = KEY_MAP[event.key.toLowerCase()];
 		if (key !== undefined) {
 			emulator.keypad[key] = true;
