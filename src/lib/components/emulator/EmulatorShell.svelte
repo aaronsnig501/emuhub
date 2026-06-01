@@ -74,6 +74,10 @@
 	let saveStates = $state<SaveSlot[]>([]);
 	let saveCounter = 1;
 	let frameVersion = $state(0);
+	let audioCtx: AudioContext | null = null;
+	let oscillator: OscillatorNode | null = null;
+	let gainNode: GainNode | null = null;
+	let muted = $state(false);
 
 	const currentTheme = $derived(displayThemes.find((theme) => theme.id === currentThemeId) ?? displayThemes[0]);
 	const activeKeys = $derived.by(() => {
@@ -137,12 +141,18 @@
 	function tick() {
 		if (!isRunning) return;
 
+		if (emulator.soundTimer > 0) {
+			emulator.soundTimer--;
+			startBeep();
+		} else {
+			stopBeep();
+		}
+
 		const stepsPerFrame = Math.max(1, Math.round(BASE_STEPS_PER_FRAME * speedMultiplier));
 		for (let i = 0; i < stepsPerFrame; i++) {
 			emulator.step();
 		}
 		if (emulator.delayTimer > 0) emulator.delayTimer--;
-		if (emulator.soundTimer > 0) emulator.soundTimer--;
 		render();
 		animationFrame = requestAnimationFrame(tick);
 	}
@@ -172,6 +182,7 @@
 	}
 
 	function onFileChange(event: Event) {
+		initAudio();
 		const file = (event.target as HTMLInputElement).files?.[0];
 		if (!file) return;
 		const reader = new FileReader();
@@ -224,6 +235,33 @@
 		saveStates = saveStates.filter((slot) => slot.id !== id);
 	}
 
+	function initAudio() {
+		if (audioCtx) return;
+
+		audioCtx = new AudioContext();
+		gainNode = audioCtx.createGain();
+		gainNode.gain.value = 0.1;
+		gainNode.connect(audioCtx.destination);
+	}
+
+	function startBeep() {
+		if (!audioCtx || !gainNode || oscillator || muted) return;
+
+		oscillator = audioCtx.createOscillator();
+		oscillator.type = 'square';
+		oscillator.frequency.value = 440;
+		oscillator.connect(gainNode);
+		oscillator.start();
+	}
+
+	function stopBeep() {
+		if (!oscillator) return;
+
+		oscillator.stop();
+		oscillator.disconnect();
+		oscillator = null;
+	}
+
 	function onKeyDown(event: KeyboardEvent) {
 		if (event.code === 'Space') {
 			if (isRunning) {
@@ -265,6 +303,8 @@
 
 	onDestroy(() => {
 		cancelLoop();
+		stopBeep();
+		audioCtx?.close();
 	});
 </script>
 
@@ -306,6 +346,9 @@
 					<button type="button" class="rounded-md border border-white/16 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[#d7d7d7] hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50" onclick={restart} disabled={!hasLoadedRom}>Restart</button>
 					<button type="button" class="rounded-md border border-white/16 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[#d7d7d7] hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50" onclick={stepFrame} disabled={!hasLoadedRom}>Step</button>
 					<button type="button" class="rounded-md border border-white/16 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[#d7d7d7] hover:border-white/30 hover:text-white disabled:cursor-not-allowed disabled:opacity-50" onclick={saveState} disabled={!hasLoadedRom}>Save state</button>
+					<button type="button" class="rounded-md border border-white/16 px-4 py-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[#d7d7d7] hover:border-white/30 hover:text-white" onclick={() => { muted = !muted; if (muted) stopBeep(); }}>
+						{muted ? 'Unmute' : 'Mute'}
+					</button>
 				</div>
 
 				<div class="rounded-2xl border border-white/8 bg-[#101010] px-4 py-3">
